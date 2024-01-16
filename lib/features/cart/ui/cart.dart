@@ -14,7 +14,7 @@ class _CartState extends State<CartScreen> {
   final CartBloc cartBloc = CartBloc();
   @override
   void initState() {
-    // cartBloc.add(CartInitialEvent());
+    cartBloc.add(CartInitialEvent());
     super.initState();
   }
 
@@ -22,28 +22,41 @@ class _CartState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cart Items'),
+        title: const Text('Cart Items'),
       ),
       body: BlocConsumer<CartBloc, CartState>(
         bloc: cartBloc,
-        listener: (context, state) {},
-        // listenWhen: (previous, current) => current is CartActionState,
-        // buildWhen: (previous, current) => current is! CartActionState,
+        listener: (context, state) {
+          if (state is RemovedFromCartState) {
+            ScaffoldMessenger.of(context).clearSnackBars();
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Item Removed from Cart!")));
+          } else if (state is AddedToWishlistState) {
+            ScaffoldMessenger.of(context).clearSnackBars();
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Item Added to WishList!")));
+          }
+        },
+        listenWhen: (previous, current) => current is CartActionState,
+        buildWhen: (previous, current) => current is! CartActionState,
         builder: (context, state) {
-          // switch (state.runtimeType) {
-          // case CartSuccessState:
-          //   final successState = state as CartSuccessState;
-          // return ListView.builder(
-          //     itemCount: successState.cartItems.length,
-          //     itemBuilder: (context, index) {
-          //       return CartTileWidget(
-          //           cartBloc: cartBloc,
-          //           productDataModel: successState.cartItems[index]);
-          //     });
-
-          //   default:
-          // }
-          return Container();
+          if (state is CartLoadedState) {
+            return state.products.isNotEmpty
+                ? ListView.builder(
+                    itemCount: state.products.length,
+                    itemBuilder: (context, index) {
+                      return CartTileWidget(
+                          cartBloc: cartBloc,
+                          productDataModel: state.products[index]);
+                    })
+                : const Center(
+                    child: Text("Cart is empty"),
+                  );
+          } else if (state is CartLoadingState) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            return const Center(child: Text("Error occured"));
+          }
         },
       ),
     );
