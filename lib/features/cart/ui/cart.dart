@@ -23,6 +23,10 @@ class _CartState extends State<CartScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cart Items'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: BlocConsumer<CartBloc, CartState>(
         bloc: cartBloc,

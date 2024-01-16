@@ -15,6 +15,6 @@ final class CartLoadedState extends CartState {
 
 final class CartLoadingState extends CartState {}
 
-final class AddedToWishlistState extends CartState {}
+final class AddedToWishlistState extends CartActionState {}
 
-final class RemovedFromCartState extends CartState {}
+final class RemovedFromCartState extends CartActionState {}

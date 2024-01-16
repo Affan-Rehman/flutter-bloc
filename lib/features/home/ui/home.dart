@@ -8,7 +8,7 @@ import 'package:flutter_bloc_app/features/home/ui/product_tile_widget.dart';
 import 'package:flutter_bloc_app/features/wishlist/ui/wishlist.dart';
 
 class Home extends StatefulWidget {
-  Home({super.key});
+  const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
