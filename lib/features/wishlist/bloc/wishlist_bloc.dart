@@ -11,11 +11,10 @@ part 'wishlist_state.dart';
 
 class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
   WishlistBloc() : super(WishlistInitial()) {
-    on<WishInitialEvent>(fun1);
-
     on<RemoveWishItem>(fun2);
 
     on<AddCartItem>(fun3);
+    on<WishInitialEvent>(fun1);
   }
 
   Future<FutureOr<void>> fun1(
